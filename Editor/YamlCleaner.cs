@@ -19,13 +19,23 @@ public sealed class YamlCleaner
         ShowAddedComponents(prefab);
         ShowRemovedComponents(prefab);
 
-        PrefabUtility.RevertObjectOverride(prefab, InteractionMode.AutomatedAction);
-        foreach (var comp in prefab.GetComponentsInChildren(typeof(Component)))
-        {
-            if (PrefabUtility.IsAddedComponentOverride(comp)) continue;
-            PrefabUtility.RevertObjectOverride(comp, InteractionMode.AutomatedAction);
-        }
-        EditorUtility.SetDirty(prefab);
+        //PrefabUtility.RevertObjectOverride(prefab, InteractionMode.AutomatedAction);
+        //foreach (var comp in prefab.GetComponentsInChildren(typeof(Component)))
+        //{
+        //    //if (PrefabUtility.IsAddedComponentOverride(comp)) continue;
+        //    //PrefabUtility.RevertObjectOverride(comp, InteractionMode.AutomatedAction);
+
+        //    var mods = PrefabUtility.GetPropertyModifications(comp);
+        //    if (mods != null)
+        //    {
+        //        foreach (var mod in mods)
+        //        {
+        //            Debug.LogFormat(mod.target, "target {0}, path {1}, value {2}", mod.target, mod.propertyPath, mod.value);
+        //        }
+        //    }
+        //}
+        //EditorUtility.SetDirty(prefab);
+
 
         //var builtInModifications = modifications.Where(p => p.propertyPath.StartsWith("m_", System.StringComparison.OrdinalIgnoreCase)).ToArray();
         //PrefabUtility.SetPropertyModifications(prefab, builtInModifications);
@@ -39,7 +49,11 @@ public sealed class YamlCleaner
         {
             foreach (var mod in mods)
             {
-                Debug.LogFormat(mod.target, "target {0}, path {1}, value {2}", mod.target, mod.propertyPath, mod.value);
+                var so = new SerializedObject(mod.target);
+                var prop = so.FindProperty(mod.propertyPath);
+                var exists = (prop != null);
+
+                Debug.LogFormat(mod.target, "target {0}, path {1}, value {2}, exists {3}", mod.target, mod.propertyPath, mod.value, exists);
             }
         }
     }

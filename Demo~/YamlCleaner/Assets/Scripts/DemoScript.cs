@@ -6,7 +6,7 @@ public class DemoScript : MonoBehaviour
     [SerializeField] private float value;
     [SerializeField] private UnityEvent onValueChanged;
 
-    public string text;
+    //public string text;
 
-    [field:SerializeField] public bool isVisible { get; set; }
+    //[field:SerializeField] public bool isVisible { get; set; }
 }
