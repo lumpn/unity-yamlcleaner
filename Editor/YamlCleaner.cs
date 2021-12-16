@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using System.Linq;
 
 public sealed class YamlCleaner
 {
@@ -7,6 +8,28 @@ public sealed class YamlCleaner
     public static void ForceReserialization()
     {
         AssetDatabase.ForceReserializeAssets();
+    }
+
+    [MenuItem("Assets/Show modifications")]
+    [MenuItem("GameObject/Show modifications")]
+    public static void ShowModifications()
+    {
+        var prefab = Selection.activeObject;
+        var modifications = PrefabUtility.GetPropertyModifications(prefab);
+        if (modifications == null)
+        {
+            Debug.Log("No modifications");
+            return;
+        }
+
+        foreach (var modification in modifications)
+        {
+            Debug.LogFormat(modification.target, "path {0}, value {1}, target {2}", modification.propertyPath, modification.value, modification.target);
+        }
+
+        var builtInModifications = modifications.Where(p => p.propertyPath.StartsWith("m_", System.StringComparison.OrdinalIgnoreCase)).ToArray();
+        PrefabUtility.SetPropertyModifications(prefab, builtInModifications);
+        EditorUtility.SetDirty(prefab);
     }
 
     [MenuItem("Assets/Debug YAML")]
