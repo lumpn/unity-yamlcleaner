@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 0
-  _onValueChanged:
+  onValueChanged:
     m_PersistentCalls:
       m_Calls: []
   text: 

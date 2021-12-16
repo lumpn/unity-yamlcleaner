@@ -3,6 +3,12 @@ using UnityEngine;
 
 public sealed class YamlCleaner
 {
+    [MenuItem("Assets/Force reserialization (all files)")]
+    public static void ForceReserialization()
+    {
+        AssetDatabase.ForceReserializeAssets();
+    }
+
     [MenuItem("Assets/Debug YAML")]
     public static void RunDebug()
     {
@@ -21,7 +27,7 @@ public sealed class YamlCleaner
     {
         var objects = Selection.objects;
         var obj = new SerializedObject(objects);
-        Clean(obj);
+        CleanPrefab(obj);
     }
 
     public static void CleanPrefab(SerializedObject gameObject)
