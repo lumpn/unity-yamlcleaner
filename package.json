@@ -1,0 +1,17 @@
+{
+  "name": "de.lumpn.unity-yamlcleaner",
+  "version": "0.1.0",
+  "displayName": "YAML Cleaner",
+  "description": "Removes obsolete overrides from YAML files.",
+  "dependencies": {
+    "com.unity.ext.nunit": "1.0.0"
+  },
+  "keywords": [
+    "lumpn",
+    "yaml"
+  ],
+  "author": {
+    "name": "Jonas Boetel",
+    "url": "https://github.com/lumpn"
+  }
+}
