@@ -297,10 +297,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1709071532841218918, guid: 34a22d5d84e141548b270a3ae0b16787, type: 3}
-      propertyPath: value
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 1799907566858946406, guid: 34a22d5d84e141548b270a3ae0b16787, type: 3}
       propertyPath: m_Name
       value: DemoPrefab
@@ -349,5 +345,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1709071532841218918, guid: 34a22d5d84e141548b270a3ae0b16787, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 34a22d5d84e141548b270a3ae0b16787, type: 3}
+--- !u!1 &1781066257 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1799907566858946406, guid: 34a22d5d84e141548b270a3ae0b16787, type: 3}
+  m_PrefabInstance: {fileID: 1781066256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &1781066258
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781066257}
+  m_Mesh: {fileID: 0}
