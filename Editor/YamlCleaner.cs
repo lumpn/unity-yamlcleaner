@@ -19,6 +19,14 @@ public sealed class YamlCleaner
         ShowAddedComponents(prefab);
         ShowRemovedComponents(prefab);
 
+        PrefabUtility.RevertObjectOverride(prefab, InteractionMode.AutomatedAction);
+        foreach (var comp in prefab.GetComponentsInChildren(typeof(Component)))
+        {
+            if (PrefabUtility.IsAddedComponentOverride(comp)) continue;
+            PrefabUtility.RevertObjectOverride(comp, InteractionMode.AutomatedAction);
+        }
+        EditorUtility.SetDirty(prefab);
+
         //var builtInModifications = modifications.Where(p => p.propertyPath.StartsWith("m_", System.StringComparison.OrdinalIgnoreCase)).ToArray();
         //PrefabUtility.SetPropertyModifications(prefab, builtInModifications);
         //EditorUtility.SetDirty(prefab);
