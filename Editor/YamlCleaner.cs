@@ -16,30 +16,14 @@ public sealed class YamlCleaner
     {
         var prefab = Selection.activeGameObject;
         ShowModifications(prefab);
-        ShowAddedComponents(prefab);
-        ShowRemovedComponents(prefab);
+    }
 
-        //PrefabUtility.RevertObjectOverride(prefab, InteractionMode.AutomatedAction);
-        //foreach (var comp in prefab.GetComponentsInChildren(typeof(Component)))
-        //{
-        //    //if (PrefabUtility.IsAddedComponentOverride(comp)) continue;
-        //    //PrefabUtility.RevertObjectOverride(comp, InteractionMode.AutomatedAction);
-
-        //    var mods = PrefabUtility.GetPropertyModifications(comp);
-        //    if (mods != null)
-        //    {
-        //        foreach (var mod in mods)
-        //        {
-        //            Debug.LogFormat(mod.target, "target {0}, path {1}, value {2}", mod.target, mod.propertyPath, mod.value);
-        //        }
-        //    }
-        //}
-        //EditorUtility.SetDirty(prefab);
-
-
-        //var builtInModifications = modifications.Where(p => p.propertyPath.StartsWith("m_", System.StringComparison.OrdinalIgnoreCase)).ToArray();
-        //PrefabUtility.SetPropertyModifications(prefab, builtInModifications);
-        //EditorUtility.SetDirty(prefab);
+    [MenuItem("Assets/Remove obsolete modifications")]
+    [MenuItem("GameObject/Remove obsolete modifications")]
+    public static void RemoveObsoleteModifications()
+    {
+        var prefab = Selection.activeGameObject;
+        RemoveObsoleteModifications(prefab);
     }
 
     private static void ShowModifications(GameObject prefab)
@@ -58,29 +42,31 @@ public sealed class YamlCleaner
         }
     }
 
-    private static void ShowRemovedComponents(GameObject prefab)
+    private static void RemoveObsoleteModifications(GameObject prefab)
     {
-        var comps = PrefabUtility.GetRemovedComponents(prefab);
-        if (comps != null)
+        var modifications = PrefabUtility.GetPropertyModifications(prefab);
+        if (modifications != null)
         {
-            foreach (var comp in comps)
+            var validModifications = modifications.Where(IsValidModification).ToArray();
+            if (validModifications.Length < modifications.Length)
             {
-                var go = comp.containingInstanceGameObject;
-                Debug.LogFormat(go, "removed {0}", comp.assetComponent);
+                PrefabUtility.SetPropertyModifications(prefab, validModifications);
+                EditorUtility.SetDirty(prefab);
+
+                var obsoleteModifications = modifications.Except(validModifications);
+                foreach (var mod in obsoleteModifications)
+                {
+                    Debug.LogFormat(mod.target, "Removed obsolete modification of target '{0}', path '{1}', value '{2}'",
+                                    mod.target, mod.propertyPath, mod.value);
+                }
             }
         }
     }
 
-    private static void ShowAddedComponents(GameObject prefab)
+    private static bool IsValidModification(PropertyModification modification)
     {
-        var comps = PrefabUtility.GetAddedComponents(prefab);
-        if (comps != null)
-        {
-            foreach (var comp in comps)
-            {
-                var go = comp.instanceComponent.gameObject;
-                Debug.LogFormat(go, "added {0}", comp.instanceComponent);
-            }
-        }
+        var obj = new SerializedObject(modification.target);
+        var property = obj.FindProperty(modification.propertyPath);
+        return (property != null);
     }
 }
